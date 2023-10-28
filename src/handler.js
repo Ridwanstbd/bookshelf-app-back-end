@@ -1,7 +1,7 @@
 const { nanoid } = require("nanoid");
 const books = require("./books");
 
-const addBookHandler = (request, h) => {
+const addBook = (request, h) => {
   const {
     name,
     year,
@@ -60,7 +60,7 @@ const addBookHandler = (request, h) => {
   return response;
 };
 
-const getAllBooksHandler = (request, h) => {
+const getAllBooks = (request, h) => {
   const mapBooks = books.map((book) => ({
     id: book.id,
     name: book.name,
@@ -76,32 +76,19 @@ const getAllBooksHandler = (request, h) => {
   return response;
 };
 
-const getBookByIdHandler = (request, h) => {
-  const { id } = request.params;
-  const book = books.filter((book) => book.id === id);
+const getBookById = (request, h) => {
+  const { bookId } = request.params;
+  const book = books.find((book) => book.id === bookId);
   if (book) {
     const response = h.response({
       status: "success",
       data: {
-        book: {
-          id: book.id,
-          name: book.name,
-          year: book.year,
-          author: book.author,
-          summary: book.summary,
-          publisher: book.publisher,
-          pageCount: book.pageCount,
-          readPage: book.readPage,
-          finished: book.pageCount === book.readPage,
-          reading: book.reading,
-          insertedAt: book.insertedAt,
-          updatedAt: book.updatedAt,
+        book,
       },
-    }
     });
     response.code(200);
     return response;
-  }else{
+  } else {
     const response = h.response({
       status: "fail",
       message: "Buku tidak ditemukan",
@@ -111,7 +98,7 @@ const getBookByIdHandler = (request, h) => {
   }
 };
 
-const editBookByIdHandler = (request, h) => {
+const editBookById = (request, h) => {
   const { bookId } = request.params;
   const {
     name,
@@ -161,19 +148,18 @@ const editBookByIdHandler = (request, h) => {
     });
     response.code(200);
     return response;
-  }else{ 
+  }
   const response = h.response({
     status: "fail",
     message: "Gagal memperbarui buku. Id tidak ditemukan",
   });
   response.code(404);
   return response;
-}
 };
 
-const deleteBookByIdHandler = (request, h) => {
-  const { id } = request.params;
-  const index = books.findIndex((book) => book.id === id);
+const deleteBookById = (request, h) => {
+  const { bookId } = request.params;
+  const index = books.findIndex((book) => book.id === bookId);
   if (index !== -1) {
     books.splice(index, 1);
     const response = h.response({
@@ -191,9 +177,9 @@ const deleteBookByIdHandler = (request, h) => {
   return response;
 };
 module.exports = {
-  addBookHandler,
-  getAllBooksHandler,
-  getBookByIdHandler,
-  editBookByIdHandler,
-  deleteBookByIdHandler,
+  addBook,
+  getAllBooks,
+  getBookById,
+  editBookById,
+  deleteBookById,
 };
