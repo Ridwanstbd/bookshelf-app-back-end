@@ -17,7 +17,7 @@ const addBookHandler = (request, h) => {
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
   if (!name) {
-    const response = h.reponse({
+    const response = h.response({
       status: "fail",
       message: "Gagal menambahkan buku. Mohon isi nama buku",
     });
@@ -89,13 +89,13 @@ const getBookByIdHandler = (request, h) => {
     response.code(200);
     return response;
   }
+    const response = h.response({
+      status: "fail",
+      message: "Buku tidak ditemukan",
+    });
+    response.code(404);
+    return response;
 
-  const response = h.response({
-    status: "fail",
-    message: "Buku tidak ditemukan",
-  });
-  response.code(404);
-  return response;
 };
 
 const editBookByIdHandler = (request, h) => {
@@ -113,7 +113,7 @@ const editBookByIdHandler = (request, h) => {
   const updateAt = new Date().toISOString();
   const index = books.findIndex((book) => book.id === id);
   if (!name) {
-    const response = h.reponse({
+    const response = h.response({
       status: "fail",
       message: "Gagal memperbarui buku. Mohon isi nama buku",
     });
