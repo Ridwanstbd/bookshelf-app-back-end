@@ -16,21 +16,6 @@ const addBookHandler = (request, h) => {
   const finished = pageCount === readPage;
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
-  const newBook = {
-    id,
-    name,
-    year,
-    author,
-    summary,
-    publisher,
-    pageCount,
-    readPage,
-    finished,
-    reading,
-    insertedAt,
-    updatedAt,
-  };
-  books.push(newBook);
   if (!name) {
     const response = h.reponse({
       status: "fail",
@@ -48,6 +33,21 @@ const addBookHandler = (request, h) => {
     response.code(400);
     return response;
   }
+  const newBook = {
+    id,
+    name,
+    year,
+    author,
+    summary,
+    publisher,
+    pageCount,
+    readPage,
+    finished,
+    reading,
+    insertedAt,
+    updatedAt,
+  };
+  books.push(newBook);
   books.filter((book) => book.id === id).length > 0;
   const response = h.response({
     status: "success",
@@ -75,7 +75,30 @@ const getAllBooksHandler = (request, h) => {
   response.code(200);
   return response;
 };
+
+const getBookByIdHandler = (request, h) => {
+  const { id } = request.params;
+  const book = books.filter((book) => book.id === id)[0];
+  if (book !== undefined) {
+  const response = h.response({
+      status: "success",
+      data: {
+        book,
+      },
+    })
+    response.code(200)
+    return response
+  }
+
+  const response = h.response({
+    status: "fail",
+    message: "Buku tidak ditemukan",
+  });
+  response.code(404)
+  return response
+};
 module.exports = {
   addBookHandler,
   getAllBooksHandler,
+  getBookByIdHandler,
 };
